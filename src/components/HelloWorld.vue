@@ -1,6 +1,11 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <img alt="Vue logo" src="../assets/logo.png">
+
+    <h1 v-on:click="clickHeader">{{ msg }}</h1>
+
+    <router-link :to="{ name: 'survey' }">Start Survey</router-link>
+
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -35,6 +40,19 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  created: () => {
+    console.log('created')
+  },
+  data: () => {
+    return {
+      count: 0
+    }
+  },
+  methods: {
+    clickHeader: () => {
+      this.data.count++
+    }
   }
 }
 </script>
