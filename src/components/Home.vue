@@ -4,7 +4,7 @@
 
     <h1 v-on:click="clickHeader">{{ msg }}</h1>
 
-    <router-link :to="{ name: 'survey' }">Start Survey</router-link>
+    <router-link :to="{ name: 'venues' }">Venues</router-link>
 
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'HomeComponent',
   props: {
     msg: String
   },
