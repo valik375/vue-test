@@ -1,39 +1,56 @@
 <template>
-  <div class="preview-review">
-    <div class="preview-review__title">{{getReviewDetails(reviewId).title}}</div>
-    <div class="preview-review__rate">{{getReviewDetails(reviewId).reviewQty.rate}}</div>
-    <button @click="completeReviewHandler">Complete Review</button>
+  <div class="preview-review" v-if="review !== null">
+    <div class="preview-review__title">Title: {{ review.title }}</div>
+    <div class="preview-review__title">Rate: {{ review.selectedRate }}</div>
+    <BaseButton @handleClick="completeReviewHandler">Complete Review</BaseButton>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from "vuex";
+import {mapGetters, mapActions} from 'vuex'
+import BaseButton from '@/UI/BaseButton'
+import routeStringHelper from '@/helpers/routeStringHelper.js'
 
 export default {
   name: 'PreviewReview',
+  components: {
+    BaseButton
+  },
   data: () => {
     return {
-      reviewId: '',
-      isLoading: false
+      routeHelper: routeStringHelper,
+      review: null,
+      globalMessage: ''
     }
   },
   computed: {
-    ...mapGetters(['getReviewDetails'])
+    ...mapGetters(['getReview'])
   },
   methods: {
     ...mapActions(['createReview']),
     async completeReviewHandler() {
-      this.isLoading = true
-      await this.createReview(this.getReviewDetails(this.reviewId))
-      this.$router.push('/thankyou')
+      await this.createReview(this.getReview)
+      await this.$router.push({name: this.routeHelper.ThankYouPageName})
     }
   },
   mounted() {
-    this.reviewId = this.$route.params.reviewId.toString()
+    this.review = this.getReview
+    !this.review ? this.$router.push({name: this.routeHelper.homePageName}) : null
   }
 }
 </script>
 
 <style scoped>
-
+.preview-review {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.preview-review__title {
+  margin-bottom: 10px;
+}
+.preview-review__title {
+  margin-bottom: 20px;
+}
 </style>

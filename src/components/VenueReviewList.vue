@@ -1,19 +1,25 @@
 <template>
   <div class="venue-review">
-    <div class="venues-details__review" v-if="reviews.length">
-      <div class="venues-details__review-item" v-for="review in reviews" :key="review.id">
-        <div class="venues-details__review-title">{{review}}</div>
-        <div class="venues-details__review-qty">{{review.reviewQty.rate}}</div>
+    <div class="venue-review__wrapper" v-if="reviews.length">
+      <div class="venue-review__list" v-for="review in reviews" :key="review.id">
+        <VenueReviewItem
+          :review="review"
+        />
       </div>
     </div>
 
-    <div class="venues-details__message" v-else>No reviews</div>
+    <div class="venue-review__message" v-else>No reviews</div>
   </div>
 </template>
 
 <script>
+import VenueReviewItem from '@/UI/VenueReviewItem'
 export default {
-  name: 'VenueReview'
+  name: 'VenueReviewList',
+  props: ['reviews'],
+  components: {
+    VenueReviewItem
+  }
 }
 </script>
 

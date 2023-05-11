@@ -1,63 +1,38 @@
 <template>
   <div class="venues-details">
-    <h1>{{ getVenuesDetails(venuesUrlId).name }}</h1>
-<!---->
-    <form class="venues-details__form" @submit.prevent="createReview">
-      <h2>Review</h2>
-      <input v-model="reviewTitle" type="text" required placeholder="text">
-      <div class="venues-details__checkbox-wrapper">
-        <div class="venues-details__radio" v-for="rateItem in reviewRate" :key="rateItem.rate">
-          <label :for="rateItem.rate">{{rateItem.rate}}</label>
-          <input :id="rateItem.rate" :value="rateItem.isActive" @change="rateItem.isActive = !rateItem.isActive" type="radio">
-        </div>
-      </div>
-      <button type="submit">Create Review</button>
-    </form>
-<!---->
-    <div class="venues-details__review" v-if="reviews.length">
-      <div class="venues-details__review-item" v-for="review in reviews" :key="review.id">
-        <div class="venues-details__review-title">{{review.title}}</div>
-        <div class="venues-details__review-qty">{{review.reviewQty.rate}}</div>
-      </div>
-    </div>
-<!--    -->
-    <div class="venues-details__message" v-else>No reviews</div>
-<!--    -->
+
+    <PageTitle>{{ venue.name }}</PageTitle>
+    <VenueDetailsForm
+      @submitForm="createReview"
+    />
+    <VenueReviewList
+      :reviews="reviews"
+    />
+
   </div>
 </template>
 
 <script>
 import {mapGetters, mapMutations} from 'vuex'
+import VenueDetailsForm from '@/components/VenueDetailsForm'
+import PageTitle from '@/UI/PageTitle'
+import routeStringHelper from '@/helpers/routeStringHelper'
+import VenueReviewList from '@/components/VenueReviewList'
 
 export default {
-  name: 'SurveyComponent',
+  name: 'VenueDetail',
+  components: {
+    VenueReviewList,
+    PageTitle,
+    VenueDetailsForm
+  },
   data: () => {
     return {
-      venuesUrlId: '',
+      venue: '',
       reviewTitle: '',
-      reviewRate: [
-        {
-          rate: 1,
-          isActive: false
-        },
-        {
-          rate: 2,
-          isActive: false
-        },
-        {
-          rate: 3,
-          isActive: false
-        },
-        {
-          rate: 4,
-          isActive: false
-        },
-        {
-          rate: 5,
-          isActive: false
-        },
-      ],
-      reviews: []
+      reviewRate: [1, 2, 3, 4, 5],
+      reviews: [],
+      routeHelper: routeStringHelper
     }
   },
   computed: {
@@ -65,27 +40,16 @@ export default {
   },
   methods: {
     ...mapMutations(['addReview']),
-    createReview() {
-      const reviewId = Date.now()
-      this.addReview({
-        id: reviewId,
-        title: this.reviewTitle,
-        reviewQty: this.reviewRate.filter(r => r.isActive)[0],
-        venuesId: this.venuesUrlId
-      })
-      this.$router.push(`/preview/${reviewId}`)
+    createReview(formData) {
+      formData.id = Date.now()
+      formData.venueId = this.$route.params.id.toString()
+      this.addReview(formData)
+
+      this.$router.push({name: this.routeHelper.PreviewReviewPageName})
     }
   },
   mounted() {
-    this.venuesUrlId = this.$route.params.id.toString()
+    this.venue = this.getVenuesDetails(this.$route.params.id.toString())
   }
 }
 </script>
-
-<style scoped>
-.venues-details__checkbox-wrapper {
-  display: flex;
-  margin: 0 auto;
-  max-width: 200px;
-}
-</style>

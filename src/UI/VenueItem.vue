@@ -1,19 +1,24 @@
 <template>
- <router-link :to="`venues/${venues.id}`" class="card-item">
-   {{venues.name}}
+ <router-link :to="`${routerHelper.venuesPath}/${venue.id}`" class="venue-item">
+   {{venue.name}}
  </router-link>
 </template>
 
 <script>
+import routeStringHelper from '@/helpers/routeStringHelper'
 
 export default {
-  name: 'VenuesItem',
-  props: ['venues']
+  name: 'VenueItem',
+  props: ['venue'],
+  data: () => ({
+    routerHelper: routeStringHelper
+  })
 }
 </script>
 
 <style scoped>
-.card-item {
+.venue-item {
   display: block;
+  margin-bottom: 20px;
 }
 </style>

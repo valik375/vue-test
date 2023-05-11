@@ -1,35 +1,16 @@
 <template>
-  <div class="hello">
-    <VenuesItem
-      v-for="venues in getVenues"
-      :key="venues.id"
-      :venues="venues"
-    />
+  <div class="home">
+    <VenuesList />
   </div>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import VenuesItem from "@/UI/VenuesItem";
 
+import VenuesList from '@/components/VenuesList'
 export default {
-  name: 'HomeComponent',
+  name: 'HomePage',
   components: {
-    VenuesItem
-  },
-  props: {
-    msg: String
-  },
-  computed: {
-    ...mapGetters(['getVenues'])
-  },
-  methods: {
-
+    VenuesList
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
